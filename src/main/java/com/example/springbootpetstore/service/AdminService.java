@@ -9,4 +9,5 @@ import com.example.springbootpetstore.pojo.Admin;
 public interface AdminService {
     Admin findByAdmin(Admin admin);
     int updateAdmin(Admin admin);
+    Admin findByPhone(Admin admin);
 }

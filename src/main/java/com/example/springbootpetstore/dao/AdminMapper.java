@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface AdminMapper {
     Admin findByAdmin(Admin admin);
     int updateAdmin(Admin admin);
+
+    Admin findByPhone(Admin admin);
 }

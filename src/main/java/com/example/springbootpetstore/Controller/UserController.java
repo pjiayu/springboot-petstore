@@ -38,12 +38,13 @@ public class UserController {
     public String addUser(){
         return "/userController/addUser";
     }
-    //根据传来的index查看用户详情
+    //根据传来的userID查看用户详情
     @GetMapping("/userInfo")
-    public String productInfo(@RequestParam(value = "index") int index,
-                              @SessionAttribute("userList") List<User> userList,
+    public String productInfo(//@RequestParam(value = "index") int index,
+                              //@SessionAttribute("userList") List<User> userList,
+                              User user,
                               Model model){
-        User user=userList.get(index);
+       // User user=userList.get(index);
         List<Transaction> transactionList=userService.QueryAllTransactionOfUser(user);
         //System.out.println("-------------"+user);
         model.addAttribute("user",user);
@@ -51,7 +52,7 @@ public class UserController {
         return "userController/userInfo";
     }
 
-    //修改密码
+    //修改用户密码
     @PostMapping("/editPsw")
     @ResponseBody
     public AjaxResult editPsw(String newPsw,@RequestParam("index") String indexStr,
@@ -73,6 +74,30 @@ public class UserController {
 
         }
 
+        return ajaxResult;
+    }
+    //编辑用户信息
+    @GetMapping("/editUser")
+    public String editUser(int userID,Model model){
+        User user=userService.findUserByID(userID);
+        model.addAttribute("user",user);
+
+        return "userController/editUser";
+    }
+
+    @PostMapping("/editUser")
+    @ResponseBody
+    public AjaxResult editUser(User user){
+        System.out.println(user);
+        AjaxResult ajaxResult=new AjaxResult();
+        try{
+            userService.UpdateUser(user);
+            ajaxResult.setSuccess(true);
+            ajaxResult.setMessage("用户信息修改成功");
+        }catch (Exception e){
+            ajaxResult.setSuccess(false);
+            ajaxResult.setMessage("用户信息修改失败");
+        }
         return ajaxResult;
     }
 }

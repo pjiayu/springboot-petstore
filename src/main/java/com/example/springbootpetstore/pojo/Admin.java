@@ -17,6 +17,15 @@ public class Admin {
     private long adminID;
     private String admin_name;
     private String password;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public long getAdminID() {
         return adminID;

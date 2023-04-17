@@ -46,10 +46,11 @@ public class TransactionController {
 
     //根据传来的index查看用户订单详情
     @GetMapping("/searchTransactionByUserId")
-    public String productInfo(@RequestParam(value = "index") int index,
+    public String productInfo(//@RequestParam(value = "index") int index,
+                              User user,
                               Model model){
         List<User>userList=allUsers();
-        User user=userList.get(index);
+        //User user=userList.get(index);
         List<Transaction> transactionList=transactionService.getTransactionsByUserID(user);
         System.out.println("-------------"+user);
         model.addAttribute("userList",userList);

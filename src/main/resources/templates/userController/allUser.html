@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="/commons/head::head">
 </head>
-<script>
+<script th:inline="javascript">
+    var trIndex;
     $(document).ready(function (){
         //复选框全选
         $("#check-all").click(function (){
@@ -44,18 +45,18 @@
                 oInput.parent().html(oInput.val());
             });
         });
-        var index;
-        $(".btn.btn-danger.btn-round.btn-xs",this).click(function (){
-            index=$(this).closest("tr").children("input").val();
-
-            console.log("点了"+index);
+        var $index;
+        $("tbody .btn.btn-danger.btn-round.btn-xs").click(function (){
+            //$index=$(this).parents("tr").index();  //index得到的是同一父级下所有子级（包括不同的元素类型）的index
+            $index=$(this).val();
+            console.log("点了"+$index);
         });
         //修改密码
         $("#finishEdit").click(function (){
             var newPsw=$("#newPsw").val();
             var confirmPsw=$("#confirmPsw").val();
 
-            console.log(index);
+            console.log($index);
             if(newPsw!==confirmPsw){
                 alert("两次密码不相同");
             }else{
@@ -64,7 +65,7 @@
                     url:"/user/editPsw",
                     data:{
                         "newPsw":newPsw,
-                        "index":0,
+                        "index":$index,
                     },
                     dataType:"json",
                     success:function (data){
@@ -84,7 +85,8 @@
             }
 
         });
-    })
+    });
+
 </script>
 <body>
 <div class="lyear-layout-web">
@@ -153,7 +155,7 @@
                                         </tr>
                                         </thead>
                                         <tbody th:each="user,userSart:${userList}">
-                                        <tr>
+                                        <tr th:id="${userSart.index}">
                                             <td>
                                                 <label class="lyear-checkbox checkbox-primary">
                                                     <input type="checkbox" name="ids" th:value="${userSart.index}" /><span></span>
@@ -166,11 +168,11 @@
                                             <td th:text="${user.address}">地址</td>
                                             <th>
                                                 <div class="btn-group">
-                                                    <a class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
-                                                    <a class="btn btn-xs btn-default" th:href="@{/user/userInfo(index=${userSart.count}-1)}" title="查看" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>
+                                                    <a class="btn btn-xs btn-default" th:href="@{/user/editUser(userID=${user.userID})}" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+                                                    <a class="btn btn-xs btn-default" th:href="@{/user/userInfo(userID=${user.userID})}" title="查看" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>
                                                     <a class="btn btn-xs btn-default" href="#!"  title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
                                                 </div>
-                                                <button type="button" id="reset" class="btn btn-danger btn-round btn-xs" data-toggle="modal" data-target="#myModal">重置密码</button>
+                                                <button type="button"  name="reset" class="btn btn-danger btn-round btn-xs" th:value="${userSart.index}"  data-toggle="modal" data-target="#myModal">重置密码</button>
 <!--                                                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
 <!--                                                    点击启动示例-->
 <!--                                                </button>-->

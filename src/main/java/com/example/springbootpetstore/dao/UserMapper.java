@@ -22,8 +22,12 @@ public interface UserMapper {
     //根据ID更新用户信息，对应信息修改功能（不修改密码）
     void UpdateUserById(User user);
 
+    void UpdateUserByAccount(User user);
+
     //根据ID重置密码，对应密码重置功能
     void ResetPassword(User user);
     //根据id查看所有订单
     List<Transaction> QueryAllTransactionOfUser(User user);
+
+    User findUserByID(int userID);
 }

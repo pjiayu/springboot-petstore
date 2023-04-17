@@ -42,6 +42,11 @@ public class ProductController {
         return "productsController/typeOfProduct";
     }
 
+    @GetMapping("/deleteTypeOfProduct")
+    public String deleteTypeOfProduct(int number){
+
+        return null;
+    }
     //通过种类筛选宠物
     //这里后面改成异步局部刷新
     @GetMapping("/searchPetsBySpecies")
@@ -70,6 +75,29 @@ public class ProductController {
         model.addAttribute("pet",pet);
         return "productsController/petInfo";
     }
+    @GetMapping("/editProduct")
+    public String editProduct(Pet pet,Model model){
+        Pet getPet=petService.queryPetById(pet);
+        model.addAttribute("pet",getPet);
+        return "productsController/editProduct";
+    }
+    @PostMapping("/editProduct")
+    @ResponseBody
+    public AjaxResult editProduct(Pet pet){
+        AjaxResult ajaxResult=new AjaxResult();
+        System.out.println(pet);
+        try{
+            petService.updatePet(pet);
+            ajaxResult.setSuccess(true);
+            ajaxResult.setMessage("pet信息修改成功");
+        }catch (Exception e){
+            ajaxResult.setSuccess(false);
+            ajaxResult.setMessage("pet信息修改失败");
+        }
+
+
+        return ajaxResult;
+    }
     @PostMapping("/deleteChosenProduct")
     @ResponseBody
     public AjaxResult deleteChosenTransaction(@RequestParam(value = "indexList") List<Integer> indexList){
@@ -85,7 +113,6 @@ public class ProductController {
             ajaxResult.setMessage("删除成功");
         });
         return ajaxResult;
-
     }
     @PostMapping("/addProduct")
     @ResponseBody
@@ -144,4 +171,5 @@ public class ProductController {
 
         return ajaxResult;
     }
+
 }

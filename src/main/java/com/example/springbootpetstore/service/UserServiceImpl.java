@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService{
         userMapper.UpdateUserById(user);
     }
 
+    @Override
+    public void UpdateUserByAccount(User user) {
+        userMapper.UpdateUserByAccount(user);
+    }
+
     //功能：重置密码，输入用户对象
     //注：仅使用userID、password属性
     //注：user内密码为明文，在service层中变成密文
@@ -45,6 +50,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<Transaction> QueryAllTransactionOfUser(User user) {
         return userMapper.QueryAllTransactionOfUser(user);
+    }
+
+    @Override
+    public User findUserByID(int userID) {
+        return userMapper.findUserByID(userID);
     }
 
 

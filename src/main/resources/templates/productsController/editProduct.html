@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/commons/head::head">
+</head>
+
+<!--消息提示-->
+<!--<script th:src="@{js/bootstrap-notify.min.js}"></script>-->
+<!--<script type="text/javascript" th:src="@{js/lightyear.js}"></script>-->
+<script type="text/javascript" th:inline="javascript">
+  $(document).ready(function (){
+    $("#editPetBtn").click(function (){
+      console.log("点了");
+      $.ajax({
+        method:"post",
+        url:"/product/editProduct",
+        data:$("#editPetForm").serialize(),
+        dataType:"json",
+        success:function (data){
+          if(data.success){
+            alert(data.message);
+            //window.location.href="/user/allUsers";
+            history.back(-1);
+            console.log("pet信息修改成功");
+
+          }else {
+            console.log("pet信息修改失败");
+            alert(data.message);
+          }
+
+        },
+        error:function (){
+          console.log("pet信息修改失败");
+
+        }
+      });
+    });
+
+  });
+
+
+
+</script>
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <aside th:replace="/commons/aside::aside(acriveUrl='allProducts',productStyle=${'block'})"></aside>
+    <!--End 左侧导航-->
+    <!--头部信息-->
+    <header th:replace="/commons/top::header(topNav=${'编辑宠物'})"></header>
+    <!--End 头部信息-->
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      <div class="container-fluid">
+
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+
+                <form id="editPetForm" method="post" action="#!" class="site-form">
+                  <div class="form-group">
+                    <!--                    <label for="userID" >userID</label>-->
+                    <input type="hidden" class="form-control" name="petID" id="petID" th:value="${pet.petID}" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="species">宠物种类</label>
+                    <input type="text" class="form-control" name="species" th:value="${pet.species}" id="species" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="name">宠物名字</label>
+                    <input type="text" class="form-control" name="name" id="name" th:value="${pet.name}" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="prices">宠物价格</label>
+                    <input type="text" class="form-control" name="prices" id="prices" th:value="${pet.prices}" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="specialPrices">宠物特价</label>
+                    <input type="text" class="form-control" name="specialPrices" id="specialPrices" th:value="${pet.specialPrices}" placeholder="（不填默认为无）">
+                  </div>
+                  <div class="form-group">
+                    <label for="amount">宠物数量</label>
+                    <input type="text" class="form-control" name="amount" id="amount" th:value="${pet.amount}" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label name="picture" id="picture" for="picture">图片</label><br>
+<!--                    <img th:src="${pet.picture}" th:alt="${pet.picture}">-->
+                    <ul class="list-inline clearfix lyear-uploads-pic">
+                      <li class="col-xs-4 col-sm-3 col-md-2">
+                        <figure>
+                          <img th:src="${pet.picture}" style="width: 50px;height: 50px" th:alt="${pet.picture}">
+                          <figcaption>
+                            <a class="btn btn-round btn-square btn-primary" href="#!"><i class="mdi mdi-eye"></i></a>
+                            <a class="btn btn-round btn-square btn-danger" href="#!"><i class="mdi mdi-delete"></i></a>
+                          </figcaption>
+                        </figure>
+                      </li>
+
+                      <li class="col-xs-4 col-sm-3 col-md-2">
+                        <a class="pic-add" id="add-pic-btn" href="#!" title="点击上传"></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="form-group">
+                    <label for="description">宠物描述</label>
+                    <input type="text" class="form-control" name="description" id="description" th:value="${pet.description}" placeholder="">
+                  </div>
+                  <button id="editPetBtn" type="button" class="btn btn-primary">完成</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
+
+</body>
+</html>

@@ -47,4 +47,8 @@ public class UserServiceTest {
         System.out.println(userService.QueryAllTransactionOfUser(user));
     }
 
+    @Test
+    public void findUserByID(){
+        System.out.println(userService.findUserByID(25));
+    }
 }

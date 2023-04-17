@@ -52,60 +52,169 @@
       });
     });
 
+    //添加发送验证码按钮的点击事件
+    $("#sendBtn").click(function () {
+      var phone=$("#phone").val();
+      $.post("/system/sendMs",{"phone":phone},function (data) {
+        alert("请在手机查看验证码");
+      });
+
+    });
+
+    //给登录按钮添加点击事件
+    $("#submitBtn1").click(function () {
+      //获取验证码 判断不为空的时候，显示点击按钮
+      var Code=$("#Code").val();
+      var phone=$("#phone").val();
+      if((Code!=null&&Code!="")){
+        //var url="/system/register";
+        var param={"Code":Code,"phone":phone};
+        $.post("/system/loginWithNumber",param,function (data) {
+          if(data.success){
+            console.log("电话号码登录成功");
+            window.location.href="/main";
+          }
+          else{
+            alert(data.message);
+          }
+        })
+      }
+    });
+
   })
 </script>
 
 
 <body>
-<form id="form" action="/system/login" method="post">
+<div id="login-box">
+  <ul class="nav nav-tabs nav-justified" style="background-color: #ffffff">
+    <li class="active">
+      <a data-toggle="tab" href="#loginByAccount">账号登录</a>
+    </li>
+    <li class="nav-item">
+      <a data-toggle="tab" href="#loginWithNumber">手机登录</a>
+    </li>
+    <li class="nav-item">
+      <a data-toggle="tab" href="#messages-basic">其它</a>
+    </li>
+  </ul>
 
-  <div id="login-box">
-    <h1>Admin-Login</h1>
-    <div class="input-box">
-      <label>
-        <span class="mdi mdi-18px mdi-account"></span>    <!--字体图标-->
-        <input type="text" placeholder="Account" name="admin_name"/>
-      </label>
-    </div>
-    <div class="input-box">
-      <label>
-        <span class="mdi mdi-18px mdi-lock-outline"></span>      <!--字体图标-->
-        <input type="password" placeholder="Password" required="required" name="password" id="psw"/>
-      </label>
-    </div>
+  <div class="tab-content">
+<!--    账号密码登录-->
+    <div class="tab-pane fade active in" id="loginByAccount">
+      <form id="form"  method="post">
+        <h1 style="padding-top: 30px">Admin-Login</h1>
+        <div class="input-box">
+          <label>
+            <span class="mdi mdi-18px mdi-account"></span>    <!--字体图标-->
+            <input type="text" placeholder="Account" name="admin_name"/>
+          </label>
+        </div>
+        <div class="input-box">
+          <label>
+            <span class="mdi mdi-18px mdi-lock-outline"></span>      <!--字体图标-->
+            <input type="password" placeholder="Password" required="required" name="password" id="psw"/>
+          </label>
+        </div>
 
-<!--    <div>-->
-<!--      <a href="ForgetPsw.jsp"><span style="font-size: x-small; color: aqua;float: right ">Forgot password?</span></a>-->
-<!--    </div>-->
+        <!--    <div>-->
+        <!--      <a href="ForgetPsw.jsp"><span style="font-size: x-small; color: aqua;float: right ">Forgot password?</span></a>-->
+        <!--    </div>-->
 
-    <br>
-    <div>
-      <img th:src="@{/system/checkCode}" width="15%" height="30" id="checkCodeImg"/>
-      <script type="text/javascript">
-        $("#checkCodeImg").click(function () {
-          //重新设置属性的值，当点击该图片时
-          $("#checkCodeImg").attr("src","/system/checkCode?m="+Math.random());
-        });
-      </script>
-      <input name="checkCode" placeholder="验证码" type="text" style="width: auto" />
+        <br>
+        <div>
+          <img th:src="@{/system/checkCode}" width="15%" height="30" id="checkCodeImg"/>
+          <script type="text/javascript">
+            $("#checkCodeImg").click(function () {
+              //重新设置属性的值，当点击该图片时
+              $("#checkCodeImg").attr("src","/system/checkCode?m="+Math.random());
+            });
+          </script>
+          <input name="checkCode" placeholder="验证码" type="text" style="width: auto" />
 
-    </div>
-    <div>
-      <input id="submitBtn" type="button" value="Sign in" class="submit">
-    </div>
-    <div>
+        </div>
+        <div>
+          <input id="submitBtn" type="button" value="Sign in" class="submit">
+        </div>
+        <div>
             <span style="font-size: small;float: right ">
                 Forget password?
             <a href=""><span style=" color: aquamarine;">click here?</span></a>
             </span>
+        </div>
+
+        <div class="input-box">
+          <span style="color: #c40000"id="msg"></span>
+        </div>
+
+      </form>
+
     </div>
 
-    <div class="input-box">
-      <span style="color: #c40000"id="msg"></span>
+
+    <div class="tab-pane fade" id="loginWithNumber">
+        <!--  *****************电话号码登录************************    -->
+      <form id="form1" action="/system/loginWithNumber" method="post">
+        <h1 style="padding-top: 30px">Phone-Login</h1>
+        <div class="input-box" style="padding-top: 30px">
+          <label>
+<!--            <span class="mdi mdi-18px mdi-account"></span>    &lt;!&ndash;字体图标&ndash;&gt;-->
+            <input type="text" placeholder="请输入手机号" id="phone" name="phone"/>
+          </label>
+        </div>
+        <div class="input-box">
+          <div style="padding-top: 20px; margin: auto; width: 300px">
+            <input type="text" style="width: 130px" name="Code" id="Code" placeholder="手机验证码">
+            <span>
+              <button class="btn" type="button" id="sendBtn" style="width:90px; height:30px">发送验证码</button>
+            </span>
+          </div>
+        </div>
+
+        <br>
+
+        <div>
+          <input id="submitBtn1" type="button" value="Sign in" class="submit">
+        </div>
+
+
+        <div class="input-box">
+          <span style="color: #c40000" id="msg1"></span>
+        </div>
+
+      </form>
     </div>
+
   </div>
-</form>
+
+</div>
+
+<!--  手机号登录-->
+
+
+
+
+<footer th:replace="/commons/footer::footer"></footer>
+
 </body>
-<!--<footer th:replace="/commons/footer::footer"></footer>-->
+<style>
+.login-form-item{
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  font-family: SF Pro Display,Roboto,Noto,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #4d4d4d;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+</style>
+
 
 </html>
+
+
+
+
+

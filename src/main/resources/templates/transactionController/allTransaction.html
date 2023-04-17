@@ -156,15 +156,15 @@
                       <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
                         用户列表 <span class="caret"></span>
                       </button>
-                      <ul class="dropdown-menu" th:each="user,userSart:${userList}">
-<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=${userSart.index})}"  data-field="user" th:text="${userList}">账号</a> </li>-->
-                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=0)}" data-field="user" >小齿轮</a> </li>
-                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=1)}" data-field="user" >chilun2</a> </li>
-                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=2)}" data-field="user" >chilun4</a> </li>
-                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=3)}" data-field="user" >pijiayu</a> </li>
-                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=4)}" data-field="user" >chilun</a> </li>
-                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=5)}" data-field="user" >ppp</a> </li>
-                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=6)}" data-field="user" >111</a> </li>
+                      <ul class="dropdown-menu">
+                        <li> <a tabindex="-1"  th:each="user,userSart:${userList}" th:href="@{/transaction/searchTransactionByUserId(userID=${user.userID})}"  data-field="user" th:text="${user.account}">账号</a> </li>
+<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=0)}" data-field="user" >小齿轮</a> </li>-->
+<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=1)}" data-field="user" >chilun2</a> </li>-->
+<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=2)}" data-field="user" >chilun4</a> </li>-->
+<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=3)}" data-field="user" >pijiayu</a> </li>-->
+<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=4)}" data-field="user" >chilun</a> </li>-->
+<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=5)}" data-field="user" >ppp</a> </li>-->
+<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=6)}" data-field="user" >111</a> </li>-->
 
 <!--                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(index=${userSart.index})}" data-field="dog" th:text="${user.account}">小狗</a> </li>-->
 <!--                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(index=${userSart.index})}" data-field="rabbit" th:text="${user.account}">小兔</a> </li>-->

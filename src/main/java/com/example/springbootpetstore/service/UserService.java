@@ -13,9 +13,11 @@ public interface UserService {
     List<User> QueryAllUsers();
 
     void UpdateUser(User user);
+    void UpdateUserByAccount(User user);
 
     void ResetPassword(User user);
     //根据id查看所有订单
     List<Transaction> QueryAllTransactionOfUser(User user);
+    User findUserByID(int userID);
 
 }

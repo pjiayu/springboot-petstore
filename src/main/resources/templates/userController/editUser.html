@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/commons/head::head">
+</head>
+
+<!--消息提示-->
+<!--<script th:src="@{js/bootstrap-notify.min.js}"></script>-->
+<!--<script type="text/javascript" th:src="@{js/lightyear.js}"></script>-->
+<script type="text/javascript" th:inline="javascript">
+  $(document).ready(function (){
+    $("#editUserBtn").click(function (){
+      console.log("点了");
+      $.ajax({
+        method:"post",
+        url:"/user/editUser",
+        data:$("#editUserForm").serialize(),
+        dataType:"json",
+        success:function (data){
+          if(data.success){
+            alert(data.message);
+            //window.location.href="/user/allUsers";
+            history.back(-1);
+            console.log("用户信息修改成功");
+
+          }else {
+            console.log("用户信息修改失败");
+            alert(data.message);
+          }
+
+        },
+        error:function (){
+          console.log("用户信息修改失败");
+
+        }
+      });
+    });
+
+  });
+
+
+
+</script>
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <aside th:replace="/commons/aside::aside(acriveUrl='allUser',productStyle=${'block'})"></aside>
+    <!--End 左侧导航-->
+    <!--头部信息-->
+    <header th:replace="/commons/top::header(topNav=${'用户信息'})"></header>
+    <!--End 头部信息-->
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      <div class="container-fluid">
+
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+
+                <form id="editUserForm" method="post" action="#!" class="site-form">
+                  <div class="form-group">
+<!--                    <label for="userID" >userID</label>-->
+                    <input type="hidden" class="form-control" name="userID" id="userID" th:value="${user.userID}" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="account">petStore账号</label>
+                    <input type="text" class="form-control" name="account" th:value="${user.account}" id="account" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="name">名字</label>
+                    <input type="text" class="form-control" name="name" id="name" th:value="${user.name}" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="address">地址</label>
+                    <input type="text" class="form-control" name="address" id="address" th:value="${user.address}" placeholder="">
+                  </div>
+                  <button id="editUserBtn" type="button" class="btn btn-primary">完成</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
+
+</body>
+</html>

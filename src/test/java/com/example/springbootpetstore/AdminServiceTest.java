@@ -27,4 +27,10 @@ public class AdminServiceTest {
         System.out.println(admin);
         System.out.println(adminService.findByAdmin(admin));
     }
+    @Test
+    public void phoneTest(){
+        Admin admin=new Admin();
+        admin.setPhone("15079587753");
+        System.out.println(adminService.findByPhone(admin));
+    }
 }

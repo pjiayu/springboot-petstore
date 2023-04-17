@@ -22,4 +22,9 @@ public class AdminServiceImpl implements AdminService{
     public int updateAdmin(Admin admin) {
         return adminMapper.updateAdmin(admin);
     }
+
+    @Override
+    public Admin findByPhone(Admin admin) {
+        return adminMapper.findByPhone(admin);
+    }
 }

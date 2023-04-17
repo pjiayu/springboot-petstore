@@ -4,7 +4,10 @@ import com.example.springbootpetstore.pojo.Admin;
 import com.example.springbootpetstore.service.AdminService;
 import com.example.springbootpetstore.utils.AjaxResult;
 import com.example.springbootpetstore.utils.CpachaUtil;
+import com.example.springbootpetstore.utils.SMSUtil;
+import com.tencentcloudapi.scf.v20180416.models.Code;
 import org.apache.tomcat.util.bcel.Const;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +39,43 @@ public class SystemController {
     @GetMapping("/login")
     public String toLogin(){
         return "login";
+    }
+
+    //点击发送短信验证码
+    @PostMapping("/sendMs")
+    @ResponseBody
+    public String sendMs (HttpServletRequest request, String phone){
+        System.out.println(phone);
+        if(phone!=null&&!phone.equals("")){
+            String s = SMSUtil.sendSMS(request,phone);
+            return s;
+        }else{
+            return "error";
+        }
+    }
+    @PostMapping("/loginWithNumber")
+    @ResponseBody
+    public AjaxResult register(HttpServletRequest request,
+                               Admin admin,Model model,@RequestParam("Code")String Code) {
+        AjaxResult ajaxResult=new AjaxResult();
+        System.out.println(admin.getPhone()+"---"+Code);
+        JSONObject json = (JSONObject)request.getSession().getAttribute("MsCode");
+        if(!json.getString("Code").equals(Code)){
+            ajaxResult.setSuccess(false);
+            ajaxResult.setMessage("验证码错误");
+        }
+        //我这里模拟了一分钟
+        if((System.currentTimeMillis() - json.getLong("createTime")) > 1000 * 60 * 1){
+            ajaxResult.setSuccess(false);
+            ajaxResult.setMessage("验证码过期");
+        }
+        //数据库查找用户
+        Admin ad=adminService.findByPhone(admin);
+        model.addAttribute("admin",ad);
+        System.out.println(ad);
+        ajaxResult.setSuccess(true);
+        ajaxResult.setMessage("登录成功");
+       return  ajaxResult;
     }
 
     //登录
