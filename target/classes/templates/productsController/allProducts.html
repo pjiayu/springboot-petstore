@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/commons/head::head">
+</head>
+<script>
+  $(document).ready(function (){
+      //复选框全选
+      $("#check-all").click(function (){
+        console.log("点了")
+        // $(this).closest("table").find("input[name='ids[]']").prop("checked",this.checked);
+        $("input[name='ids[]']").prop("checked",this.checked);
+      });
+
+      //删除
+    //多行删除
+    //   $("input[type='button']").click(function (){
+    //     $("table input[name='ids[]']:checked").parents("tr").remove();
+    //   });
+      $(".btn.btn-danger").click(function (){
+        var indexList=[];
+        $("table input[name='ids[]']:checked").each(function (){
+          indexList.push($(this).val());
+        });
+
+        var arrType = indexList.join(",");
+        console.log(indexList);
+        $.ajax({
+          url:"/product/deleteChosenProduct",
+          type:"post",
+          data:{"indexList":arrType},
+          // dataType:"json",
+          traditional:true,
+          success:function (data){
+            if(data.success){
+              $("table input[name='ids[]']:checked").parents("tr").remove()
+              alert(data.message);
+              //取消勾选
+              $("table input[name='ids[]']:checked").click();
+            }
+          },
+          error:function (){
+            alert("出错");
+          }
+        });
+
+      });
+      //直接删除
+      $(".mdi.mdi-window-close").parents("a").click(function (){
+        $(this).parents("tr").remove();
+      });
+
+      //保存
+    $(".btn .btn-success .m-r-5").click(function (){
+
+    });
+
+   //双击td进入编辑状态
+    /* 给表格里面每一个td添加一个dblclick事件 */
+    $("td").dblclick(function (){
+      var $tdVal=$(this).text();
+      var oInput=$("<input type='text' value='"+$tdVal+"'/>" );
+      $(this).html(oInput);
+      oInput.focus();
+
+      /* 2.失去焦点，这个td变为原来的text，value为修改过后的value */
+      oInput.blur(function (){
+        oInput.parent().html(oInput.val());
+      });
+    });
+  })
+</script>
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <aside th:replace="/commons/aside::aside(activeUrl=${'allProducts'},productStyle=${'block'})"></aside>
+    <!--End 左侧导航-->
+
+    <!--头部信息-->
+    <header th:replace="/commons/top::header(topNav=${'所有商品'})"></header>
+    <!--End 头部信息-->
+
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-toolbar clearfix">
+                <form class="pull-right search-bar" method="get" action="#!" role="form">
+                  <div class="input-group">
+<!--                    <input type="button" style="width: 50px;height: 30px" id="search_pet" value="search">-->
+                    <div class="input-group-btn">
+                      <input type="hidden"  name="search_field" id="search-field" value="title">
+                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                        宠物种类 <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(species=1)}" data-field="cat">小猫</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(species=2)}" data-field="dog">小狗</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(species=3)}" data-field="rabbit">小兔</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(species=4)}" data-field="bird">小鸟</a> </li>
+                      </ul>
+                    </div>
+                    <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称"/>
+
+                  </div>
+                </form>
+                <div class="toolbar-btn-action">
+                  <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                  <a class="btn btn-primary m-r-5" th:href="@{/product/addProduct}"><i class="mdi mdi-plus"></i> 新增</a>
+<!--                  <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>-->
+                  <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+<!--                  <a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 保存</a>-->
+<!--                  <input type="button" id="delete" name="delete" value="delete">-->
+                </div>
+              </div>
+              <div class="card-body">
+
+                <div class="table-responsive">
+                  <table id="table" class="table table-bordered">
+                    <thead>
+                    <tr>
+                      <th>
+                        <label class="lyear-checkbox checkbox-primary">
+                          <input type="checkbox" id="check-all"><span></span>
+                        </label>
+                      </th>
+                      <th>编号</th>
+                      <th>宠物种类</th>
+                      <th>宠物名字</th>
+                      <th>价格</th>
+                      <th>特价</th>
+                      <th>数量</th>
+                      <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="pet,petSart:${petList}">
+                    <tr>
+                      <td>
+                        <label class="lyear-checkbox checkbox-primary">
+                          <input type="checkbox" name="ids[]" th:value="${petSart.index}" ><span></span>
+                        </label>
+                      </td>
+                      <td th:text="${petSart.count}">编号</td>
+                      <td th:text="${pet.species}">species</td>
+                      <td th:text="${pet.name}">name</td>
+                      <td th:text="${pet.prices}">prices</td>
+                      <td th:if="${pet.specialPrices} ne null" th:text="${pet.specialPrices}">specialPrices</td>
+                      <td th:unless="${pet.specialPrices} ne null" th:text="无">无</td>
+                      <td th:text="${pet.amount}"><font class="text-success">amount</font></td>
+                      <th>
+                        <div class="btn-group">
+                          <a class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+                          <a class="btn btn-xs btn-default" th:href="@{/product/productInfo(index=${petSart.index})}" title="查看" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>
+                          <a class="btn btn-xs btn-default" href="#!"  title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+                        </div>
+                      </th>
+                    </tr>
+                    </tbody>
+
+                  </table>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $('.search-bar .dropdown-menu a').click(function() {
+      var field = $(this).data('field') || '';
+      console.log(field);
+      $('#search-field').val(field);
+      $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+
+
+
+  });
+</script>
+</body>
+</html>

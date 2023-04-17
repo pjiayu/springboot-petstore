@@ -3,7 +3,6 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/resources/mybatis/PetMapper.xml" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/mybatis/SpeciesMapper.xml" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/mybatis/TransactionMapper.xml" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/mybatis/UserMapper.xml" dialect="GenericSQL" />
   </component>
 </project>

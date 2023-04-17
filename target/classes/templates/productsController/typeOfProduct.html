@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/commons/head::head">
+</head>
+<script>
+    $(document).ready(function (){
+        //直接删除
+        $(".mdi.mdi-window-close").parents("a").click(function (){
+            alert("确定删除？");
+            $(this).parents("tr").remove();
+        });
+
+        //双击进入编辑状态
+        /* 给表格里面每一个td添加一个dblclick事件 */
+        $("td").dblclick(function (){
+            var $tdVal=$(this).text();
+            var oInput=$("<input type='text' value='"+$tdVal+"'/>" );
+            $(this).html(oInput);
+            oInput.focus();
+
+            /* 2.失去焦点，这个td变为原来的text，value为修改过后的value */
+            oInput.blur(function (){
+                oInput.parent().html(oInput.val());
+            });
+        });
+
+    });
+
+</script>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <aside th:replace="/commons/aside::aside(activeUrl=${'typeOfProduct'},productStyle=${'block'})"></aside>
+        <!--End 左侧导航-->
+        <!--头部信息-->
+        <header th:replace="/commons/top::header(topNav=${'商品类型'})"></header>
+        <!--End 头部信息-->
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                            <a class="btn btn-primary m-r-5" th:href="@{/product/addProduct}"><i class="mdi mdi-plus"></i> 新增</a>
+<!--                            <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>-->
+<!--                            <div class="card-header"><h4>表格</h4></div>-->
+                              <div class="card-body">
+<!--                                <h5>鼠标悬停 <code>.table-hover</code></h5>-->
+
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#序号</th>
+                                        <th>种类编号</th>
+                                        <th>宠物种类</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody th:each="species,speciesSart:${speciesList}">
+                                    <tr>
+                                        <th scope="row" th:text="${speciesSart.count}">序号</th>
+                                        <td th:text="${species.number}">种类编号</td>
+                                        <td th:text="${species.species}">宠物种类</td>
+                                        <th>
+                                            <div class="btn-group">
+                                                <a class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+                                                <a class="btn btn-xs btn-default" href="#!"  title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                              </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
+
+</body>
+</html>

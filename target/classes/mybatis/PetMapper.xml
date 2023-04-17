@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springbootpetstore.dao.PetMapper"><!--mapper接口与映射文件关联-->
+    <!--mapper接口的全类名和映射文件的命名空间（namespace）保持一致-->
+
+
+    <!--mapper接口中方法的方法名和映射文件中编写SQL的标签的id属性保持一致-->
+    <insert id="registerPet" useGeneratedKeys="true" keyProperty="petID">
+        insert into pets(petID, species, name, description, picture, prices, amount, specialPrices)
+        values (null, #{species}, #{name}, #{description}, #{picture}, #{prices}, #{amount}, #{specialPrices});
+    </insert>
+
+    <select id="queryAllPets" resultType="com.example.springbootpetstore.pojo.Pet">
+        select *
+        from pets
+        where amount > 0
+        union
+        select *
+        from pets
+        where amount = 0;
+    </select>
+
+    <select id="queryPetById" resultType="com.example.springbootpetstore.pojo.Pet">
+        select *
+        from pets
+        where petID = #{petID};
+    </select>
+
+    <delete id="deletePet">
+        delete
+        from pets
+        where petID = #{petID};
+    </delete>
+
+    <select id="queryPetWithoutInventory" resultType="com.example.springbootpetstore.pojo.Pet">
+        select *
+        from pets
+        where amount = 0;
+    </select>
+
+    <update id="updatePet">
+        update pets
+        set species       = #{species},
+            name          = #{name},
+            description   = #{description},
+            picture       = #{picture},
+            prices        = #{prices},
+            amount        = #{amount},
+            specialPrices = #{specialPrices}
+        where petID = #{petID}
+    </update>
+
+    <select id="searchPetsBySpecies" resultType="com.example.springbootpetstore.pojo.Pet">
+        select *from pets where species=#{species}
+    </select>
+
+    <select id="queryAllSpecies" resultType="Species">
+        select *from pet_species
+    </select>
+
+    <select id="queryPetBySpeciesAndName" resultType="Pet">
+        select *from pets where species=#{species} and name=#{name}
+    </select>
+</mapper>

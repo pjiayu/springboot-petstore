@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springbootpetstore.dao.SpeciesMapper"><!--mapper接口与映射文件关联-->
+    <!--mapper接口的全类名和映射文件的命名空间（namespace）保持一致-->
+
+    <!--mapper接口中方法的方法名和映射文件中编写SQL的标签的id属性保持一致-->
+    <insert id="addNewSpecies" useGeneratedKeys="true" keyProperty="number">
+        insert into pet_species (number, species)
+        values (null, #{species});
+    </insert>
+    <delete id="deleteSpecies">
+        delete
+        from pet_species
+        where species = #{species}
+    </delete>
+    <update id="updateSpecies">
+        update pet_species
+        set species = #{species}
+        where number = #{number};
+    </update>
+    <select id="getAllSpecies" resultType="com.example.springbootpetstore.pojo.Species">
+        select *from pet_species;
+    </select>
+
+    <select id="getSpecies" resultType="Species">
+        select *from pet_species where species=#{speciesName}
+    </select>
+</mapper>

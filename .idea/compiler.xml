@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="springboot-petstore" target="1.8" />
+      <module name="springboot-petstore" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

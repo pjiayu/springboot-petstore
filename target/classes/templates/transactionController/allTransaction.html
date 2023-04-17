@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/commons/head::head">
+</head>
+<script>
+  $(document).ready(function (){
+    //复选框全选
+    $("#check-all").click(function (){
+      console.log("点了")
+      // $(this).closest("table").find("input[name='ids[]']").prop("checked",this.checked);
+      $("input[name='ids[]']").prop("checked",this.checked);
+    });
+
+    //删除
+    //多行删除
+    //   $("input[type='button']").click(function (){
+    //     $("table input[name='ids[]']:checked").parents("tr").remove();
+    //   });
+      //顶部按钮删除
+    $(".btn.btn-danger").click(function (){
+        var indexList=[];
+        $("table input[name='ids[]']:checked").each(function (){
+            indexList.push($(this).val());
+        });
+
+        var arrType = indexList.join(",");
+        console.log(indexList);
+        $.ajax({
+            url:"/transaction/deleteChosenTransaction",
+            type:"post",
+            data:{"indexList":arrType},
+            // dataType:"json",
+            traditional:true,
+            success:function (data){
+                if(data.success){
+                    $("table input[name='ids[]']:checked").parents("tr").remove()
+                    alert(data.message);
+                    //取消勾选
+                    $("table input[name='ids[]']:checked").click();
+                }
+            },
+            error:function (){
+                alert("出错");
+            }
+        });
+
+
+    });
+    //直接删除
+    $(".mdi.mdi-window-close").parents("a").click(function (){
+        console.log("父级元素"+$(this).parent());
+       // var index=
+            $(this).parents("tr").remove();
+          //  .children("input").val();
+        //console.log(index);
+
+        // $.ajax({
+        //     type:"post",
+        //     url:"/transaction/deleteOneTransaction",
+        //     data:{"index":index},
+        //     dataType:"json",
+        //     success:function (data){
+        //         $(this).parents("tr").remove();
+        //         alert(data.message);
+        //     },
+        //     error:function (){
+        //         alert("出错");
+        //     }
+        // });
+
+
+    });
+
+
+
+
+    //双击td进入编辑状态
+    /* 给表格里面每一个td添加一个dblclick事件 */
+    $("td").dblclick(function (){
+      var $tdVal=$(this).text();
+      var oInput=$("<input type='text' value='"+$tdVal+"'/>" );
+      $(this).html(oInput);
+      oInput.focus();
+
+      /* 2.失去焦点，这个td变为原来的text，value为修改过后的value */
+      oInput.blur(function (){
+        oInput.parent().html(oInput.val());
+      });
+    });
+
+    //发货
+      $(".btn.btn-primary.m-r-5").click(function (){
+          console.log("发货");
+          $("table input[name='ids[]']:checked").parents("tr").children(".text-danger").text("已发货");
+
+
+          //更新数据库
+          var indexList=[];
+          //这种写法不行,值为空
+          // indexList=$("table input[name='ids[]']:checked").val();
+
+          $("table input[name='ids[]']:checked").each(function (){
+              indexList.push($(this).val());
+          });
+          var arrType = indexList.join(",");//把复选框的值以数组形式存放
+          console.log(indexList);
+          $.ajax({
+              url:"/transaction/deliverGoods",
+              type:"post",
+              data:{"indexList":arrType},
+              // dataType:"json",
+              traditional:true,
+              success:function (data){
+                  if(data.success){
+                      $("table input[name='ids[]']:checked").parents("tr").children("#state").attr("class","text-success");
+                      //取消勾选
+                      $("table input[name='ids[]']:checked").click();
+                      alert(data.message);
+                  }
+              },
+              error:function (){
+                  alert("出错");
+              }
+          });
+
+
+      });
+
+
+
+  })
+</script>
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <aside th:replace="/commons/aside::aside(activeUrl=${'allTransaction'},productStyle=${'block'})"></aside>
+    <!--End 左侧导航-->
+
+    <!--头部信息-->
+    <header th:replace="/commons/top::header(topNav=${'所有订单'})"></header>
+    <!--End 头部信息-->
+
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-toolbar clearfix">
+                <form class="pull-right search-bar" method="get" action="#!" role="form">
+                  <div class="input-group">
+                    <!--                    <input type="button" style="width: 50px;height: 30px" id="search_pet" value="search">-->
+                    <div class="input-group-btn">
+                      <input type="hidden"  name="search_field" id="search-field" value="title">
+                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                        用户列表 <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" th:each="user,userSart:${userList}">
+<!--                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=${userSart.index})}"  data-field="user" th:text="${userList}">账号</a> </li>-->
+                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=0)}" data-field="user" >小齿轮</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=1)}" data-field="user" >chilun2</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=2)}" data-field="user" >chilun4</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=3)}" data-field="user" >pijiayu</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=4)}" data-field="user" >chilun</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=5)}" data-field="user" >ppp</a> </li>
+                        <li> <a tabindex="-1" th:href="@{/transaction/searchTransactionByUserId(index=6)}" data-field="user" >111</a> </li>
+
+<!--                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(index=${userSart.index})}" data-field="dog" th:text="${user.account}">小狗</a> </li>-->
+<!--                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(index=${userSart.index})}" data-field="rabbit" th:text="${user.account}">小兔</a> </li>-->
+<!--                        <li> <a tabindex="-1" th:href="@{/product/searchPetsBySpecies(sindex=${userSart.index})}" data-field="bird" th:text="${user.account}">小鸟</a> </li>-->
+                      </ul>
+                    </div>
+                    <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称"/>
+
+                  </div>
+                </form>
+                <div class="toolbar-btn-action">
+                    <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                    <a class="btn btn-primary m-r-5" href="#!"><i class="mdi mdi-plus"></i> 发货</a>
+                  <!--                  <a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>-->
+                  <!--                  <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>-->
+                  <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+                  <!--                  <input type="button" id="delete" name="delete" value="delete">-->
+                </div>
+              </div>
+              <div class="card-body">
+
+                <div class="table-responsive">
+                  <table id="table" class="table table-bordered">
+                    <thead>
+                    <tr>
+                      <th>
+                        <label class="lyear-checkbox checkbox-primary">
+                          <input type="checkbox" id="check-all"><span></span>
+                        </label>
+                      </th>
+                      <th>编号</th>
+                      <th>订单id</th>
+                      <th>账户名</th>
+                      <th>订单详情</th>
+                      <th>订单状态</th>
+                      <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="transaction,transactionSart:${transactionList}">
+                    <tr>
+                      <td>
+                        <label class="lyear-checkbox checkbox-primary">
+                          <input type="checkbox" name="ids[]" th:value="${transactionSart.index}" ><span></span>
+                        </label>
+                      </td>
+                      <td th:text="${transactionSart.count}">编号</td>
+                      <td th:text="${transaction.transactionID}">订单id</td>
+                      <td th:text="${transaction.userId}">账户名</td>
+                      <td th:text="${transaction.specificInfo}">订单详情</td>
+                      <td id="state" th:text="${transaction.state}" th:class="${transaction.state}=='已发货'?'text-success':'text-danger'"  >订单状态</td>
+                      <th>
+                        <div class="btn-group">
+                          <a class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+<!--                          <a class="btn btn-xs btn-default" th:href="@{/transaction/productInfo(index=${petSart.count}-1)}" title="查看" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>-->
+                          <a class="btn btn-xs btn-default"   title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+                        </div>
+                      </th>
+                    </tr>
+                    </tbody>
+
+                  </table>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    //搜索框事件
+    $('.search-bar .dropdown-menu a').click(function() {
+      var field = $(this).data('field') || '';//获取元素data-value属性的值，等价于$(this).attr('data-value'),这里是data-field
+      console.log(field);
+      $('#search-field').val(field);
+      $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+
+
+
+  });
+</script>
+</body>
+</html>

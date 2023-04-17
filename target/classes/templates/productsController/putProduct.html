@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/commons/head::head">
+</head>
+<script>
+    $(document).ready(function (){
+        $("#submitNewPet").click(function (){
+            var speciesName=$("#speciesName").val();
+            var petName=$("#petName").val();
+            var prices=$("#price").val();
+            var speciesPrices=$("#specialPrice").val();
+            var amount=$("#amount").val();
+            var description=$("#pet_description").val();
+            var newPet={
+                "speciesName":speciesName,
+                "name":petName,
+                "prices":prices,
+                "speciesPrices":speciesPrices,
+                "amount":parseInt(amount),
+                "description":description
+            };
+            console.log(newPet);
+            $.ajax({
+                type:"post",
+                url:"/product/putProduct",
+                data:{
+                    "speciesName":speciesName,
+                    "name":petName,
+                    "prices":prices,
+                    "speciesPrices":speciesPrices,
+                    "amount":parseInt(amount),
+                    "description":description
+                },
+                //data:JSON.stringify(newPet),
+                dataType:"json",
+                success:function (data){
+                    if(data.success){
+                        alert(data.message);
+                    }else{
+                        alert(data.message);
+                    }
+                },
+                error:function () {
+                    alert("出错");
+                }
+            });
+        });
+        $(".btn.btn-danger").click(function (){
+            $("#speciesName").val("");
+            $("#petName").val("");
+            $("#price").val("");
+            $("#specialPrice").val("");
+            $("#amount").val("");
+            $("#pet_description").val("");
+        });
+
+
+    });
+
+</script>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <aside th:replace="/commons/aside::aside(activeUrl=${'putProduct'},productStyle=${'block'})"></aside>
+        <!--End 左侧导航-->
+        <!--头部信息-->
+        <header th:replace="/commons/top::header(topNav=${'上架商品'})"></header>
+        <!--End 头部信息-->
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                                <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 清空</a>
+                                <form id="putPet" action="#!" method="post" class="row">
+                                    <div class="form-group col-md-12">
+                                        <label for="speciesName">宠物种类</label>
+                                        <input type="text" class="form-control" id="speciesName" name="speciesName" value="" placeholder="请输入上架宠物种类" />
+
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="petName">宠物名字</label>
+                                        <input type="text" class="form-control" id="petName" name="petName" value="" placeholder="请输入宠物名字" />
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="price">价格</label>
+                                        <input type="text" class="form-control" id="price" name="price" value="" placeholder="请输入宠物价格" />
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="specialPrice">特价</label>
+                                        <input type="text" class="form-control" id="specialPrice" name="specialPrice" value="0" placeholder="请输入特价(0表示无)" />
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="amount">数量</label>
+                                        <input type="text" class="form-control" id="amount" name="amount" value="" placeholder="请输入数量" />
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="pet_description">宠物描述</label>
+                                        <textarea class="form-control" id="pet_description" name="pet_description" rows="5" value="" placeholder="描述"></textarea>
+                                    </div>
+<!--                                    <div class="form-group col-md-12">-->
+<!--                                        <label>多图上传</label>-->
+<!--                                        <div class="form-controls">-->
+
+<!--                                            <ul class="list-inline clearfix lyear-uploads-pic">-->
+<!--                                                <li class="col-xs-4 col-sm-3 col-md-2">-->
+<!--                                                    <figure>-->
+<!--                                                        <img th:src="@{/picture/animal/cat2.jpeg}" alt="图片一">-->
+<!--                                                        <figcaption>-->
+<!--                                                            <a class="btn btn-round btn-square btn-primary" href="#!"><i class="mdi mdi-eye"></i></a>-->
+<!--                                                            <a class="btn btn-round btn-square btn-danger" href="#!"><i class="mdi mdi-delete"></i></a>-->
+<!--                                                        </figcaption>-->
+<!--                                                    </figure>-->
+<!--                                                </li>-->
+
+<!--                                                <li class="col-xs-4 col-sm-3 col-md-2">-->
+<!--                                                    <a class="pic-add" id="add-pic-btn" href="#!" title="点击上传"></a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+
+                                    <div class="form-group col-md-12">
+                                        <button id="submitNewPet" type="button" class="btn btn-primary ajax-post" target-form="add-form">确 定</button>
+                                        <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
+
+</body>
+</html>

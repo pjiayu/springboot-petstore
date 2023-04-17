@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>Sign in</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/login/login.css}"/>
+  <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet" type="text/css" >
+
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+
+  <title>petStore</title>
+  <link rel="shortcut icon" href="/img/title/petStore2.png" type="image/x-icon">
+</head>
+<nav class="top0">
+
+  <a th:href="@{/main}" style="margin-left: 20px">
+    <span style="color: #c40000; margin: 0;" class="mdi mdi-18px mdi-home"></span>
+  </a>
+
+  <span style="margin-left: 20px">喵，欢迎来到petStore</span>
+
+  <span style="margin-left: 20px" >
+          <a href="help.html">关于我</a>
+        </span>
+</nav>
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+  $(function (){
+    //登录
+    $("#submitBtn").click(function(){
+      $.ajax({
+        type: "post",
+        url:"/system/login",
+      //利用form表单的id,调用serialize方法
+      //将表单中的所有信心,打包发送到springMvc
+      //注意,serialize方法依据的是表单中的name属性,
+      // 所以name属性要赋值才能使用serialize方法
+        data: $("#form").serialize(),
+        dataType: "json", //返回数据类型
+        success: function(data){
+          if(data.success){
+            console.log("success of login");
+            window.location.href ="/main";
+          }else{
+            console.log("失败"+data.message);
+            //$.messager.alert("消息提醒", data.message, "warning");
+            $("#msg").text(data.message);
+            $("#checkCodeImg").click();//切换验证码
+            $("input[name='checkCode']").val("");//清空验证码输入框
+          }
+        }
+      });
+    });
+
+  })
+</script>
+
+
+<body>
+<form id="form" action="/system/login" method="post">
+
+  <div id="login-box">
+    <h1>Admin-Login</h1>
+    <div class="input-box">
+      <label>
+        <span class="mdi mdi-18px mdi-account"></span>    <!--字体图标-->
+        <input type="text" placeholder="Account" name="admin_name"/>
+      </label>
+    </div>
+    <div class="input-box">
+      <label>
+        <span class="mdi mdi-18px mdi-lock-outline"></span>      <!--字体图标-->
+        <input type="password" placeholder="Password" required="required" name="password" id="psw"/>
+      </label>
+    </div>
+
+<!--    <div>-->
+<!--      <a href="ForgetPsw.jsp"><span style="font-size: x-small; color: aqua;float: right ">Forgot password?</span></a>-->
+<!--    </div>-->
+
+    <br>
+    <div>
+      <img th:src="@{/system/checkCode}" width="15%" height="30" id="checkCodeImg"/>
+      <script type="text/javascript">
+        $("#checkCodeImg").click(function () {
+          //重新设置属性的值，当点击该图片时
+          $("#checkCodeImg").attr("src","/system/checkCode?m="+Math.random());
+        });
+      </script>
+      <input name="checkCode" placeholder="验证码" type="text" style="width: auto" />
+
+    </div>
+    <div>
+      <input id="submitBtn" type="button" value="Sign in" class="submit">
+    </div>
+    <div>
+            <span style="font-size: small;float: right ">
+                Forget password?
+            <a href=""><span style=" color: aquamarine;">click here?</span></a>
+            </span>
+    </div>
+
+    <div class="input-box">
+      <span style="color: #c40000"id="msg"></span>
+    </div>
+  </div>
+</form>
+</body>
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
+
+</html>

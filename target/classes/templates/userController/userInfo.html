@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>userInfo待完善</h1>
+<h4 th:text="${user.account}">账号名</h4>
+<div>
+    已购订单：<br>
+    <div th:each="transaction,Sart:${transactionList}">
+        <span th:text="${Sart.count}"></span>:    <span th:text="${transaction.specificInfo}"></span>
+    </div>
+</div>
+</body>
+</html>

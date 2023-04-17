@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springbootpetstore.dao.UserMapper"><!--mapper接口与映射文件关联-->
+    <!--mapper接口的全类名和映射文件的命名空间（namespace）保持一致-->
+
+    <!--mapper接口中方法的方法名和映射文件中编写SQL的标签的id属性保持一致-->
+    <select id="QueryAllUsers" resultType="com.example.springbootpetstore.pojo.User">
+        select *
+        from users;
+    </select>
+
+    <update id="UpdateUserById">
+        update users
+        set name    = #{name},
+            address = #{address},
+            account=#{account}
+        where userID = #{userID}
+    </update>
+
+    <update id="ResetPassword">
+        update users
+        set password = #{password}
+        where userID = #{userID}
+    </update>
+
+    <select id="QueryAllTransactionOfUser" resultType="Transaction">
+        select *
+        from transactions
+        where UserId=#{userID}
+    </select>
+
+</mapper>

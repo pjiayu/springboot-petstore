@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>宠物具体界面</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/login/login.css}"/>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+  <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet" type="text/css" >
+  <link rel="shortcut icon" href="/img/title/petStore2.png" type="image/x-icon">
+  <style>
+    body {
+      /*background-image: url("/picture/PetBackground.jpg");*/
+      background-size: 100% 100%;
+    }
+    h1 {
+      color:orange;
+      text-align:center;
+    }
+    p {
+      font-family: "Times New Roman", serif;
+      font-size:20px;
+    }
+
+    .divLeft {
+      float: left;
+      width: 40%;
+    }
+
+    .divLeftOn {
+      float: left;
+      width: 40%;
+      position: absolute;
+      top: 20%;
+      left: 3%;
+    }
+
+    .divLeftDown {
+      float: left;
+      width: 40%;
+      position: absolute;
+      top: 40%;
+      left: 4%;
+    }
+
+    .divRight {
+      float: right;
+      width: 60%
+    }
+
+    .divRightOn {
+      position: absolute;
+      width: 60%
+    }
+
+    .divRightCenter {
+      position: absolute;
+      top: 60%;
+      width: 60%
+    }
+
+    .divRightDown {
+      position: absolute;
+      top: 90%;
+      width: 60%
+    }
+
+    .name {
+      font-family: "华文彩云", serif;
+      font-size: 50px;
+      color: #ffc300;
+    }
+
+    .picture {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 400px;
+      border-radius: 20px;
+      border-style: solid;
+      border-width: 5px;
+      border-color: #5d5d69;
+    }
+
+    .description {
+      font-family: "Comic Sans MS", cursive, sans-serif;
+    }
+
+    .description2 {
+      text-align:left;
+      width:65%;
+      margin:0 auto;
+    }
+
+    .inputSubmit{
+
+    }
+    .inputText{
+      height:27px;
+      padding:0 6px;
+      width:40px;
+      background:transparent;
+      border:1px solid #ffffff
+    }
+
+    .login{
+      width: auto;
+      height: auto;
+      border-radius: 5px;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffa900;
+    }
+
+    .continueViewAndReturnMain{
+      width: auto;
+      height: auto;
+      border-radius: 5px;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffa900;
+    }
+  </style>
+</head>
+<nav class="top0">
+
+  <a th:href="@{/main}" style="margin-left: 20px">
+    <span style="color: #c40000; margin: 0;" class="mdi mdi-18px mdi-home"></span>
+  </a>
+
+  <span style="margin-left: 20px">喵，欢迎来到petStore</span>
+
+  <span style="margin-left: 20px" >
+          <a href="#!">关于我</a>
+        </span>
+</nav>
+<body>
+<div>
+  <div class="divLeft">
+    <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+
+    <div class="divLeftOn">
+      <h1 class="name" th:text="${pet.name}"></h1>
+    </div>
+    <div class="divLeftDown">
+      <center>
+        <span th:if="${pet.picture eq '无'}">
+          暂无图片
+        </span>
+        <span th:unless="${pet.picture eq '无'}">
+          <img th:src="${#httpServletRequest.getScheme()+'://'+#httpServletRequest.getServerName()+':'+#httpServletRequest.getServerPort()+'/'+#httpServletRequest.getContextPath()+'/'+pet.picture}"
+               width="500" alt="没有这个宠物" class="picture">
+        </span>
+<!--        <c:if test="${pet.picture eq '无'}">-->
+<!--          暂无图片-->
+<!--        </c:if >-->
+<!--        <c:if test="${pet.picture ne '无'}">-->
+<!--          <img src="${pageContext.request.scheme }://${pageContext.request.serverName }:${pageContext.request.serverPort }/${pageContext.request.contextPath}/${pet.picture}"-->
+<!--               width="500" alt="没有这个宠物" class="picture"/>-->
+<!--        </c:if>-->
+      </center>
+    </div>
+  </div>
+  <div class="divRight">
+    <center>
+      <div class="divRightOn">
+        <br><br>
+        <h2 class="description">Pet details</h2>
+        <p class="description2" th:text="${pet.description}">${pet.description }</p>
+        <br><br>
+      </div>
+      <div class="divRightCenter">
+        <br><br>
+        单价: <strong><span th:text="${pet.prices}" ></span></strong>
+        <br><br>
+        宠物剩余: <strong><span th:text="${pet.amount}"></span></strong>
+        <br><br>
+<!--        <form action="AddCart?from=${requestScope.from}" method="post">-->
+<!--          选购数量:-->
+<!--          <input type="text" size="1" name="NumOfBuy" value="1" class="inputText"/>-->
+<!--          <input type="hidden" size="1" name="petID" value="${pet.petID}">-->
+<!--          <c:if test="${sessionScope.user ne null}">-->
+<!--            <input type="submit" value="加入购物车" class="inputSubmit"/>-->
+<!--            <%&#45;&#45;             如果from参数为select就用 response.sendRedirect("/select?back=true");          &#45;&#45;%>-->
+<!--            <%&#45;&#45;             要不然就用response.sendRedirect("/main");           &#45;&#45;%>-->
+<!--          </c:if>-->
+<!--          <br><br>-->
+<!--          <c:if test="${sessionScope.user eq null}">-->
+<!--            <a href="login"><img class="login" src="${pageContext.request.scheme }://${pageContext.request.serverName }:${pageContext.request.serverPort }${pageContext.request.contextPath}/picture/登录以加入购物车.png" alt="登录以加入购物车"/></a>-->
+<!--          </c:if>-->
+<!--        </form>-->
+<!--      </div>-->
+<!--      <div class="divRightDown">-->
+<!--        <c:if test="${requestScope.from eq 'main'}">-->
+<!--          <a href="/main"><img class="continueViewAndReturnMain" src="${pageContext.request.scheme }://${pageContext.request.serverName }:${pageContext.request.serverPort }${pageContext.request.contextPath}/picture/返回主页.png" alt="返回主页"/></a>-->
+<!--        </c:if>-->
+<!--        <c:if test="${requestScope.from eq 'select'}">-->
+<!--          <a href="select?pageNo=${page.pageNo+1}&back=true"><img class="continueViewAndReturnMain" src="${pageContext.request.scheme }://${pageContext.request.serverName }:${pageContext.request.serverPort }${pageContext.request.contextPath}/picture/继续浏览.png" alt="继续浏览"/></a>-->
+<!--        </c:if>-->
+      </div>
+    </center>
+  </div>
+</div>
+</body>
+</html>
