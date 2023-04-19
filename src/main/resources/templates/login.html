@@ -20,10 +20,11 @@
   <span style="margin-left: 20px">喵，欢迎来到petStore</span>
 
   <span style="margin-left: 20px" >
-          <a href="help.html">关于我</a>
+          <a href="#!">关于我</a>
         </span>
 </nav>
 <script src="/js/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:inline="javascript">
   $(function (){
     //登录
@@ -95,7 +96,7 @@
       <a data-toggle="tab" href="#loginWithNumber">手机登录</a>
     </li>
     <li class="nav-item">
-      <a data-toggle="tab" href="#messages-basic">其它</a>
+      <a data-toggle="tab" href="#messages-basic">第三方</a>
     </li>
   </ul>
 
@@ -194,22 +195,9 @@
 
 
 
-<footer th:replace="/commons/footer::footer"></footer>
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
 
 </body>
-<style>
-.login-form-item{
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  font-family: SF Pro Display,Roboto,Noto,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #4d4d4d;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-</style>
 
 
 </html>

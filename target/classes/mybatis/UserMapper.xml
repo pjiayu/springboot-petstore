@@ -19,6 +19,13 @@
             account=#{account}
         where userID = #{userID}
     </update>
+    <update id="UpdateUserByAccount">
+        update users
+        set name    = #{name},
+            address = #{address},
+            account=#{account}
+        where account = #{account}
+    </update>
 
     <update id="ResetPassword">
         update users
@@ -32,4 +39,9 @@
         where UserId=#{userID}
     </select>
 
+    <select id="findUserByID" resultType="User">
+        select *
+        from users
+        where UserId=#{userID}
+    </select>
 </mapper>

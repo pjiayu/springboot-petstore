@@ -69,6 +69,20 @@
     });
   })
 </script>
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $('.search-bar .dropdown-menu a').click(function() {
+      var field = $(this).data('field') || '';
+      console.log(field);
+      $('#search-field').val(field);
+      $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+
+
+
+  });
+</script>
 <body>
 <div class="lyear-layout-web">
   <div class="lyear-layout-container">
@@ -178,19 +192,6 @@
 </div>
 
 <!--<footer th:replace="/commons/footer::footer"></footer>-->
-<script type="text/javascript">
-  $(document).ready(function(){
 
-    $('.search-bar .dropdown-menu a').click(function() {
-      var field = $(this).data('field') || '';
-      console.log(field);
-      $('#search-field').val(field);
-      $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
-    });
-
-
-
-  });
-</script>
 </body>
 </html>

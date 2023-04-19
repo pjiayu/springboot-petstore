@@ -11,8 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,6 +31,8 @@ public class ProductController {
     PetService petService=new PetServiceImpl();
     @Autowired
     SpeciesService speciesService=new SpeciesServiceImpl();
+    static int picName=1;   //头像名字
+    static String fatherPath="C:\\Users\\pi\\Pictures\\temp";
 
     @GetMapping("/allProducts")
     public String toAllProducts(Model model){
@@ -83,9 +89,20 @@ public class ProductController {
     }
     @PostMapping("/editProduct")
     @ResponseBody
-    public AjaxResult editProduct(Pet pet){
+    public AjaxResult editProduct(Pet pet, @RequestParam("changePicture")MultipartFile files) throws IOException {
         AjaxResult ajaxResult=new AjaxResult();
-        System.out.println(pet);
+        System.out.println("修改宠物:"+pet);
+        //System.out.println("files"+ files);
+
+
+        String fileName=files.getOriginalFilename();//获取图片名字，例如：1.jpeg
+        System.out.println("fileName:"+fileName);
+        //将图片存入本地
+        File file=new File(fatherPath,fileName);
+        files.transferTo(file);
+        //存入图片路径，通过映射器映射
+        pet.setPicture("/pet/"+fileName);
+        System.out.println("path:"+file.getAbsolutePath());
         try{
             petService.updatePet(pet);
             ajaxResult.setSuccess(true);
@@ -138,7 +155,7 @@ public class ProductController {
     @PostMapping("/putProduct")
     @ResponseBody
     public AjaxResult putProduct( String speciesName, String name,
-                                 BigDecimal prices, BigDecimal speciesPrices, int amount,
+                                 BigDecimal prices, BigDecimal speciesPrices, int amount,String picture,
                                  String description){
         AjaxResult ajaxResult=new AjaxResult();
 
@@ -148,6 +165,7 @@ public class ProductController {
         pet.setPrices(prices);
         pet.setSpecialPrices(speciesPrices);
         pet.setAmount(amount);
+        pet.setPicture(picture);
         pet.setDescription(description);
 
         System.out.println("--speciesName--"+speciesName+"--pet--"+pet);

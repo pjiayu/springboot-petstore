@@ -69,6 +69,20 @@
     });
   })
 </script>
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $('.search-bar .dropdown-menu a').click(function() {
+      var field = $(this).data('field') || '';
+      console.log(field);
+      $('#search-field').val(field);
+      $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+
+
+
+  });
+</script>
 <body>
 <div class="lyear-layout-web">
   <div class="lyear-layout-container">
@@ -152,7 +166,7 @@
                       <td th:text="${pet.amount}"><font class="text-success">amount</font></td>
                       <th>
                         <div class="btn-group">
-                          <a class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+                          <a class="btn btn-xs btn-default" th:href="@{/product/editProduct(petID=${pet.petID})}" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
                           <a class="btn btn-xs btn-default" th:href="@{/product/productInfo(index=${petSart.index})}" title="查看" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>
                           <a class="btn btn-xs btn-default" href="#!"  title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
                         </div>
@@ -178,19 +192,6 @@
 </div>
 
 <!--<footer th:replace="/commons/footer::footer"></footer>-->
-<script type="text/javascript">
-  $(document).ready(function(){
 
-    $('.search-bar .dropdown-menu a').click(function() {
-      var field = $(this).data('field') || '';
-      console.log(field);
-      $('#search-field').val(field);
-      $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
-    });
-
-
-
-  });
-</script>
 </body>
 </html>

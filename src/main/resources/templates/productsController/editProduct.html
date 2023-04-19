@@ -8,13 +8,35 @@
 <!--<script type="text/javascript" th:src="@{js/lightyear.js}"></script>-->
 <script type="text/javascript" th:inline="javascript">
   $(document).ready(function (){
+    //修改宠物信息
     $("#editPetBtn").click(function (){
       console.log("点了");
+      var form=document.getElementById("editPetForm");
+      //获取图片
+      //var files = $("#changePicture").prop("files");
+      // console.log(files);
+      // if (files.length <= 0) {
+      //   return;
+      // }
+      var formData = new FormData(form);
+      console.log(formData);
+     //将file封装到Array
+     //  for(var i = 0;i < files.length;i++) {
+     //    //不能给FormData对象中直接传入一个数组，通过多次append的key相同时则可达到传数组的效果
+     //    formData.append("files", files[i]);
+     //  }
+      //formData.append("files",files[0]);
+      //上传后端
       $.ajax({
         method:"post",
         url:"/product/editProduct",
-        data:$("#editPetForm").serialize(),
+        data:formData,
         dataType:"json",
+        //ajax2.0可以不用设置请求头，但是jq帮我们自动设置了，这样的话需要我们自己取消掉
+        contentType:false,  //没有contentType和processData网页会报错illegal invocation
+        //取消帮我们格式化数据，是什么就是什么
+        processData:false,  //数据不做处理
+        cache: false,//上传文件无需缓存
         success:function (data){
           if(data.success){
             alert(data.message);
@@ -33,6 +55,32 @@
 
         }
       });
+    });
+
+    //上传更新图片到界面
+    $("#add-pic-btn").click(function (){
+      $("#changePicture").click();
+      $("#changePicture").change(function (){
+        //获取上传文件对象
+        var file=$(this)[0].files[0];
+        //读取文件url
+        var reader =new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload=function (){
+          console.log("图片地址"+this.result);
+          $("#picture").attr("src",this.result);
+        }
+      });
+
+    });
+
+
+    $(".btn.btn-round.btn-square.btn-danger").click(function (){
+
+      $("#picture").hide();
+      $("#picture").attr("src",null);
+
     });
 
   });
@@ -60,7 +108,7 @@
               <div class="card-body">
                 <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
 
-                <form id="editPetForm" method="post" action="#!" class="site-form">
+                <form id="editPetForm" method="post" action="#!" class="site-form" enctype="multipart/form-data">
                   <div class="form-group">
                     <!--                    <label for="userID" >userID</label>-->
                     <input type="hidden" class="form-control" name="petID" id="petID" th:value="${pet.petID}" placeholder="">
@@ -86,12 +134,12 @@
                     <input type="text" class="form-control" name="amount" id="amount" th:value="${pet.amount}" placeholder="">
                   </div>
                   <div class="form-group">
-                    <label name="picture" id="picture" for="picture">图片</label><br>
+                    <label for="picture">图片</label><br>
 <!--                    <img th:src="${pet.picture}" th:alt="${pet.picture}">-->
                     <ul class="list-inline clearfix lyear-uploads-pic">
                       <li class="col-xs-4 col-sm-3 col-md-2">
                         <figure>
-                          <img th:src="${pet.picture}" style="width: 50px;height: 50px" th:alt="${pet.picture}">
+                          <img id="picture" th:src="${pet.picture}" style="width: 250px;height: 200px" th:alt="${pet.picture}" >
                           <figcaption>
                             <a class="btn btn-round btn-square btn-primary" href="#!"><i class="mdi mdi-eye"></i></a>
                             <a class="btn btn-round btn-square btn-danger" href="#!"><i class="mdi mdi-delete"></i></a>
@@ -101,6 +149,7 @@
 
                       <li class="col-xs-4 col-sm-3 col-md-2">
                         <a class="pic-add" id="add-pic-btn" href="#!" title="点击上传"></a>
+                        <input id="changePicture" name="changePicture"  type="file" multiple="multiple" style="display: none"  accept="image/png, image/jpg,image/jpeg">
                       </li>
                     </ul>
                   </div>

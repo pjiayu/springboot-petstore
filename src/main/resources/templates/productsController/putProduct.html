@@ -4,12 +4,14 @@
 </head>
 <script>
     $(document).ready(function (){
+        var file;
         $("#submitNewPet").click(function (){
             var speciesName=$("#speciesName").val();
             var petName=$("#petName").val();
             var prices=$("#price").val();
             var speciesPrices=$("#specialPrice").val();
             var amount=$("#amount").val();
+            var fileName="/pet/"+file.name;
             var description=$("#pet_description").val();
             var newPet={
                 "speciesName":speciesName,
@@ -17,20 +19,14 @@
                 "prices":prices,
                 "speciesPrices":speciesPrices,
                 "amount":parseInt(amount),
+                "picture":fileName,
                 "description":description
             };
             console.log(newPet);
             $.ajax({
                 type:"post",
                 url:"/product/putProduct",
-                data:{
-                    "speciesName":speciesName,
-                    "name":petName,
-                    "prices":prices,
-                    "speciesPrices":speciesPrices,
-                    "amount":parseInt(amount),
-                    "description":description
-                },
+                data:newPet,
                 //data:JSON.stringify(newPet),
                 dataType:"json",
                 success:function (data){
@@ -54,6 +50,31 @@
             $("#pet_description").val("");
         });
 
+        //上传更新图片到界面
+        $("#add-pic-btn").click(function (){
+            $("#changePicture").click();
+            $("#changePicture").change(function (){
+                //获取上传文件对象
+                file=$(this)[0].files[0];
+                //读取文件url
+                var reader =new FileReader();
+                reader.readAsDataURL(file);
+
+                reader.onload=function (){
+                    console.log("图片地址"+this.result);
+                    $("#picture").show();
+                    $("#picture").attr("src",this.result);
+
+                }
+            });
+
+        });
+
+        $(".btn.btn-round.btn-square.btn-danger").click(function (){
+
+            $("#picture").hide();
+            $("#picture").attr("src",null);
+        });
 
     });
 
@@ -99,31 +120,33 @@
                                         <label for="amount">数量</label>
                                         <input type="text" class="form-control" id="amount" name="amount" value="" placeholder="请输入数量" />
                                     </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label for="picture">图片</label><br>
+                                        <!--                    <img th:src="${pet.picture}" th:alt="${pet.picture}">-->
+                                        <ul class="list-inline clearfix lyear-uploads-pic">
+                                            <li class="col-xs-4 col-sm-3 col-md-2">
+                                                <a class="pic-add" id="add-pic-btn"  href="#!" title="点击上传"></a>
+                                                <input id="changePicture" name="changePicture"  type="file" multiple="multiple" style="display: none"  accept="image/png, image/jpg,image/jpeg">
+                                            </li>
+
+                                            <li class="col-xs-4 col-sm-3 col-md-2">
+                                                <figure>
+                                                    <img id="picture" src="" style="width: 250px;height: 200px;display: none" alt=""  >
+                                                    <figcaption>
+                                                        <a class="btn btn-round btn-square btn-primary" href="#!"><i class="mdi mdi-eye"></i></a>
+                                                        <a class="btn btn-round btn-square btn-danger" href="#!"><i class="mdi mdi-delete"></i></a>
+                                                    </figcaption>
+                                                </figure>
+                                            </li>
+                                        </ul>
+                                    </div>
+
                                     <div class="form-group col-md-12">
                                         <label for="pet_description">宠物描述</label>
                                         <textarea class="form-control" id="pet_description" name="pet_description" rows="5" value="" placeholder="描述"></textarea>
                                     </div>
-<!--                                    <div class="form-group col-md-12">-->
-<!--                                        <label>多图上传</label>-->
-<!--                                        <div class="form-controls">-->
 
-<!--                                            <ul class="list-inline clearfix lyear-uploads-pic">-->
-<!--                                                <li class="col-xs-4 col-sm-3 col-md-2">-->
-<!--                                                    <figure>-->
-<!--                                                        <img th:src="@{/picture/animal/cat2.jpeg}" alt="图片一">-->
-<!--                                                        <figcaption>-->
-<!--                                                            <a class="btn btn-round btn-square btn-primary" href="#!"><i class="mdi mdi-eye"></i></a>-->
-<!--                                                            <a class="btn btn-round btn-square btn-danger" href="#!"><i class="mdi mdi-delete"></i></a>-->
-<!--                                                        </figcaption>-->
-<!--                                                    </figure>-->
-<!--                                                </li>-->
-
-<!--                                                <li class="col-xs-4 col-sm-3 col-md-2">-->
-<!--                                                    <a class="pic-add" id="add-pic-btn" href="#!" title="点击上传"></a>-->
-<!--                                                </li>-->
-<!--                                            </ul>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
 
                                     <div class="form-group col-md-12">
                                         <button id="submitNewPet" type="button" class="btn btn-primary ajax-post" target-form="add-form">确 定</button>

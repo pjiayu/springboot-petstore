@@ -16,4 +16,9 @@ parameterType="Admin"-->
     <update id="updateAdmin" >
         update admin set password=#{password} where adminId=#{adminID}
     </update>
+
+    <select id="findByPhone" resultType="Admin">
+        select *from admin
+        where phone=#{phone}
+    </select>
 </mapper>

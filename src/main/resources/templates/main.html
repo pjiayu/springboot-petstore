@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/commons/head::head">
+
 </head>
+
+
 <!--javascript:是伪协议，表示url的内容通过javascript执行。
   void(0)表示不作任何操作，这样会防止链接跳转到其他页面。这么做其实往往是为了保留链接的样式，但不让链接执行实际操作。-->
 
@@ -23,7 +26,7 @@
 添加@RequestParam(value = "indexList")后，变成Required request parameter  indexList  for method parameter type List is not present]
 直到最后.join(',')加了逗号才成功
  -->
-
+<!--main.min.js突然不能用是什么情况-->
 
 
 
@@ -49,6 +52,6 @@
     </div>
 </div>
 
-<footer th:replace="/commons/footer::footer"></footer>
+<!--<footer th:replace="/commons/footer::footer"></footer>-->
 </body>
 </html>

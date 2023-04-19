@@ -52,7 +52,7 @@ public class TransactionController {
         List<User>userList=allUsers();
         //User user=userList.get(index);
         List<Transaction> transactionList=transactionService.getTransactionsByUserID(user);
-        System.out.println("-------------"+user);
+        //System.out.println("-------------"+user);
         model.addAttribute("userList",userList);
         model.addAttribute("transactionList",transactionList);
         return "transactionController/allTransaction";
